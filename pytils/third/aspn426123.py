@@ -142,7 +142,7 @@ no_check = False # set this to True to turn all checks off
 ################################################################################
 
 from inspect import getargspec, isfunction, isbuiltin, isclass
-from types import NoneType
+NoneType = type(None)
 from re import compile as regex
 from functools import reduce
 
