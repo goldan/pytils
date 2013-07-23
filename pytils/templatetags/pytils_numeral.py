@@ -31,12 +31,12 @@ def choose_plural(amount, variants):
         {{ some_int|choose_plural:"пример,примера,примеров" }}
     """
     try:
-        if isinstance(variants, basestring):
+        if isinstance(variants, str):
             uvariants = smart_unicode(variants, encoding)
         else:
             uvariants = [smart_unicode(v, encoding) for v in variants]
         res = numeral.choose_plural(amount, uvariants)
-    except Exception, err:
+    except Exception as err:
         # because filter must die silently
         try:
             default_variant = variants
@@ -58,12 +58,12 @@ def get_plural(amount, variants):
         {{ some_int|get_plural:"пример,примера,примеров,нет примеров" }}
     """
     try:
-        if isinstance(variants, basestring):
+        if isinstance(variants, str):
             uvariants = smart_unicode(variants, encoding)
         else:
             uvariants = [smart_unicode(v, encoding) for v in variants]
         res = numeral._get_plural_legacy(amount, uvariants)
-    except Exception, err:
+    except Exception as err:
         # because filter must die silently
         try:
             default_variant = variants
@@ -76,7 +76,7 @@ def rubles(amount, zero_for_kopeck=False):
     """Converts float value to in-words representation (for money)"""
     try:
         res = numeral.rubles(amount, zero_for_kopeck)
-    except Exception, err:
+    except Exception as err:
         # because filter must die silently
         res = default_value % {'error': err, 'value': str(amount)}
     return res
@@ -93,7 +93,7 @@ def in_words(amount, gender=None):
     """
     try:
         res = numeral.in_words(amount, getattr(numeral, str(gender), None))
-    except Exception, err:
+    except Exception as err:
         # because filter must die silently
         res = default_value % {'error': err, 'value': str(amount)}
     return res
@@ -122,12 +122,12 @@ def sum_string(amount, gender, items):
         {% sum_string some_other_int FEMALE "задача,задачи,задач" %}
     """
     try:
-        if isinstance(items, basestring):
+        if isinstance(items, str):
             uitems = smart_unicode(items, encoding, default_uvalue)
         else:
             uitems = [smart_unicode(i, encoding) for i in items]
         res = numeral.sum_string(amount, getattr(numeral, str(gender), None), uitems)
-    except Exception, err:
+    except Exception as err:
         # because tag's renderer must die silently
         res = default_value % {'error': err, 'value': str(amount)}
     return res

@@ -144,6 +144,7 @@ no_check = False # set this to True to turn all checks off
 from inspect import getargspec, isfunction, isbuiltin, isclass
 from types import NoneType
 from re import compile as regex
+from functools import reduce
 
 ################################################################################
 
@@ -203,14 +204,13 @@ Checker._registered.append((lambda x: isinstance(x, str), StrChecker))
 class TupleChecker(Checker):
 
     def __init__(self, reference):
-        self.reference = map(Checker.create, reference)
+        self.reference = list(map(Checker.create, reference))
 
     def check(self, value):
         return reduce(lambda r, c: r or c.check(value), self.reference, False)
 
 Checker._registered.append((lambda x: isinstance(x, tuple) and not
-                                      filter(lambda y: Checker.create(y) is None,
-                                             x),
+                                      [y for y in x if Checker.create(y) is None],
                             TupleChecker))
 
 optional = lambda *args: args + (NoneType, )
@@ -236,7 +236,7 @@ class ListOfChecker(Checker):
 
     def check(self, value):
         return isinstance(value, list) and \
-               not filter(lambda e: not self.reference.check(e), value)
+               not [e for e in value if not self.reference.check(e)]
 
 list_of = lambda *args: lambda value: ListOfChecker(*args).check(value)
 
@@ -249,7 +249,7 @@ class TupleOfChecker(Checker):
 
     def check(self, value):
         return isinstance(value, tuple) and \
-               not filter(lambda e: not self.reference.check(e), value)
+               not [e for e in value if not self.reference.check(e)]
 
 tuple_of = lambda *args: lambda value: TupleOfChecker(*args).check(value)
 
@@ -263,8 +263,8 @@ class DictOfChecker(Checker):
 
     def check(self, value):
         return isinstance(value, dict) and \
-               not filter(lambda e: not self.key_reference.check(e), value.iterkeys()) and \
-               not filter(lambda e: not self.value_reference.check(e), value.itervalues())
+               not [e for e in iter(list(value.keys())) if not self.key_reference.check(e)] and \
+               not [e for e in iter(list(value.values())) if not self.value_reference.check(e)]
 
 dict_of = lambda *args: lambda value: DictOfChecker(*args).check(value)
 
@@ -276,7 +276,7 @@ class RegexChecker(Checker):
         self.reference = regex(reference)
 
     def check(self, value):
-        return isinstance(value, basestring) and self.reference.match(value)
+        return isinstance(value, str) and self.reference.match(value)
 
 by_regex = lambda *args: lambda value: RegexChecker(*args).check(value)
 
@@ -288,7 +288,7 @@ class AttrChecker(Checker):
         self.attrs = attrs
 
     def check(self, value):
-        return reduce(lambda r, c: r and c, map(lambda a: hasattr(value, a), self.attrs), True)
+        return reduce(lambda r, c: r and c, [hasattr(value, a) for a in self.attrs], True)
 
 with_attr = lambda *args: lambda value: AttrChecker(*args).check(value)
 
@@ -320,7 +320,7 @@ def takes(*args, **kwargs):
         checkers.append(checker)
 
     kwcheckers = {}
-    for kwname, kwarg in kwargs.iteritems():
+    for kwname, kwarg in list(kwargs.items()):
         checker = Checker.create(kwarg)
         if checker is None:
             raise TypeError("@takes decorator got parameter %s of unsupported "
@@ -353,7 +353,7 @@ def takes(*args, **kwargs):
                                                   (method.__name__, i + 1,
                                                    type_name(arg)))
 
-                for kwname, checker in kwcheckers.iteritems():
+                for kwname, checker in list(kwcheckers.items()):
                     if not checker.check(kwargs.get(kwname, None)):
                         raise InputParameterError("%s() got invalid parameter "
                                                   "%s of type %s" %

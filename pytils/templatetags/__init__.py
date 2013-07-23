@@ -10,11 +10,11 @@ Pytils templatetags for Django web-framework
 def init_defaults(debug, show_value):
     if debug:
         default_value = "unknown: %(error)s"
-        default_uvalue = u"unknown: %(error)s"
+        default_uvalue = "unknown: %(error)s"
     elif show_value:
         default_value = "%(value)s"
-        default_uvalue = u"%(value)s"
+        default_uvalue = "%(value)s"
     else:
         default_value = ""
-        default_uvalue = u""
+        default_uvalue = ""
     return default_value, default_uvalue

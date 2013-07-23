@@ -9,64 +9,64 @@ from pytils.utils import takes, optional, list_of, tuple_of, \
                          nothing, one_of, check_positive, check_length
 
 FRACTIONS = (
-    (u"десятая", u"десятых", u"десятых"),
-    (u"сотая", u"сотых", u"сотых"),
-    (u"тысячная", u"тысячных", u"тысячных"),
-    (u"десятитысячная", u"десятитысячных", u"десятитысячных"),
-    (u"стотысячная", u"стотысячных", u"стотысячных"),
-    (u"миллионная", u"милллионных", u"милллионных"),
-    (u"десятимиллионная", u"десятимилллионных", u"десятимиллионных"),
-    (u"стомиллионная", u"стомилллионных", u"стомиллионных"),
-    (u"миллиардная", u"миллиардных", u"миллиардных"),
+    ("десятая", "десятых", "десятых"),
+    ("сотая", "сотых", "сотых"),
+    ("тысячная", "тысячных", "тысячных"),
+    ("десятитысячная", "десятитысячных", "десятитысячных"),
+    ("стотысячная", "стотысячных", "стотысячных"),
+    ("миллионная", "милллионных", "милллионных"),
+    ("десятимиллионная", "десятимилллионных", "десятимиллионных"),
+    ("стомиллионная", "стомилллионных", "стомиллионных"),
+    ("миллиардная", "миллиардных", "миллиардных"),
     )  #: Forms (1, 2, 5) for fractions
 
 ONES = {
-    0: (u"",       u"",       u""),
-    1: (u"один",   u"одна",   u"одно"),
-    2: (u"два",    u"две",    u"два"),
-    3: (u"три",    u"три",    u"три"),
-    4: (u"четыре", u"четыре", u"четыре"),
-    5: (u"пять",   u"пять",   u"пять"),
-    6: (u"шесть",  u"шесть",  u"шесть"),
-    7: (u"семь",   u"семь",   u"семь"),
-    8: (u"восемь", u"восемь", u"восемь"),
-    9: (u"девять", u"девять", u"девять"),
+    0: ("",       "",       ""),
+    1: ("один",   "одна",   "одно"),
+    2: ("два",    "две",    "два"),
+    3: ("три",    "три",    "три"),
+    4: ("четыре", "четыре", "четыре"),
+    5: ("пять",   "пять",   "пять"),
+    6: ("шесть",  "шесть",  "шесть"),
+    7: ("семь",   "семь",   "семь"),
+    8: ("восемь", "восемь", "восемь"),
+    9: ("девять", "девять", "девять"),
     }  #: Forms (MALE, FEMALE, NEUTER) for ones
 
 TENS = {
-    0: u"",
+    0: "",
     # 1 - особый случай
-    10: u"десять",
-    11: u"одиннадцать",
-    12: u"двенадцать",
-    13: u"тринадцать",
-    14: u"четырнадцать",
-    15: u"пятнадцать",
-    16: u"шестнадцать",
-    17: u"семнадцать",
-    18: u"восемнадцать",
-    19: u"девятнадцать",
-    2: u"двадцать",
-    3: u"тридцать",
-    4: u"сорок",
-    5: u"пятьдесят",
-    6: u"шестьдесят",
-    7: u"семьдесят",
-    8: u"восемьдесят",
-    9: u"девяносто",
+    10: "десять",
+    11: "одиннадцать",
+    12: "двенадцать",
+    13: "тринадцать",
+    14: "четырнадцать",
+    15: "пятнадцать",
+    16: "шестнадцать",
+    17: "семнадцать",
+    18: "восемнадцать",
+    19: "девятнадцать",
+    2: "двадцать",
+    3: "тридцать",
+    4: "сорок",
+    5: "пятьдесят",
+    6: "шестьдесят",
+    7: "семьдесят",
+    8: "восемьдесят",
+    9: "девяносто",
     }  #: Tens
 
 HUNDREDS = {
-    0: u"",
-    1: u"сто",
-    2: u"двести",
-    3: u"триста",
-    4: u"четыреста",
-    5: u"пятьсот",
-    6: u"шестьсот",
-    7: u"семьсот",
-    8: u"восемьсот",
-    9: u"девятьсот",
+    0: "",
+    1: "сто",
+    2: "двести",
+    3: "триста",
+    4: "четыреста",
+    5: "пятьсот",
+    6: "шестьсот",
+    7: "семьсот",
+    8: "восемьсот",
+    9: "девятьсот",
     }  #: Hundreds
 
 MALE = 1    #: sex - male
@@ -74,7 +74,7 @@ FEMALE = 2  #: sex - female
 NEUTER = 3  #: sex - neuter
 
 
-@takes((int, long, float, Decimal),
+@takes((int, int, float, Decimal),
        optional(int),
        signs=optional(int))
 def _get_float_remainder(fvalue, signs=9):
@@ -96,7 +96,7 @@ def _get_float_remainder(fvalue, signs=9):
     @raise ValueError: signs overflow
     """
     check_positive(fvalue)
-    if isinstance(fvalue, (int, long)):
+    if isinstance(fvalue, int):
         return "0"
     if isinstance(fvalue, Decimal) and fvalue.as_tuple()[2] == 0:
         # Decimal.as_tuple() -> (sign, digit_tuple, exponent)
@@ -128,7 +128,7 @@ def _get_float_remainder(fvalue, signs=9):
     return remainder
 
 
-@takes((int,long), (unicode, list_of(unicode), tuple_of(unicode)))
+@takes((int,int), (str, list_of(str), tuple_of(str)))
 def choose_plural(amount, variants):
     """
     Choose proper case depending on amount
@@ -149,7 +149,7 @@ def choose_plural(amount, variants):
     @raise ValueError: variants' length lesser than 3
     """
     
-    if isinstance(variants, unicode):
+    if isinstance(variants, str):
         variants = utils.split_values(variants)
     check_length(variants, 3)
     amount = abs(amount)
@@ -164,10 +164,10 @@ def choose_plural(amount, variants):
     
     return variants[variant]
 
-@takes((int,long),
-       (unicode, list_of(unicode), tuple_of(unicode)),
-        optional((nothing, unicode)),
-        absence=optional((nothing, unicode)))
+@takes((int,int),
+       (str, list_of(str), tuple_of(str)),
+        optional((nothing, str)),
+        absence=optional((nothing, str)))
 def get_plural(amount, variants, absence=None):
     """
     Get proper case with value
@@ -187,12 +187,12 @@ def get_plural(amount, variants, absence=None):
     @rtype: C{unicode}
     """
     if amount or absence is None:
-        return u"%d %s" % (amount, choose_plural(amount, variants))
+        return "%d %s" % (amount, choose_plural(amount, variants))
     else:
         return absence
 
 
-@takes((int,long), (unicode, list_of(unicode), tuple_of(unicode)))
+@takes((int,int), (str, list_of(str), tuple_of(str)))
 def _get_plural_legacy(amount, extra_variants):
     """
     Get proper case with value (legacy variant, without absence)
@@ -210,7 +210,7 @@ def _get_plural_legacy(amount, extra_variants):
     @rtype: C{unicode}
     """
     absence = None
-    if isinstance(extra_variants, unicode):
+    if isinstance(extra_variants, str):
         extra_variants = utils.split_values(extra_variants)
     if len(extra_variants) == 4:
         variants = extra_variants[:3]
@@ -219,7 +219,7 @@ def _get_plural_legacy(amount, extra_variants):
         variants = extra_variants
     return get_plural(amount, variants, absence)
 
-@takes((int, long, float, Decimal), optional(bool), zero_for_kopeck=optional(bool))
+@takes((int, int, float, Decimal), optional(bool), zero_for_kopeck=optional(bool))
 def rubles(amount, zero_for_kopeck=False):
     """
     Get string for money
@@ -241,7 +241,7 @@ def rubles(amount, zero_for_kopeck=False):
 
     pts = []
     amount = round(amount, 2)
-    pts.append(sum_string(int(amount), 1, (u"рубль", u"рубля", u"рублей")))
+    pts.append(sum_string(int(amount), 1, ("рубль", "рубля", "рублей")))
     remainder = _get_float_remainder(amount, 2)
     iremainder = int(remainder)
 
@@ -250,12 +250,12 @@ def rubles(amount, zero_for_kopeck=False):
         if iremainder < 10 and len(remainder) == 1:
             iremainder *= 10
         pts.append(sum_string(iremainder, 2,
-                              (u"копейка", u"копейки", u"копеек")))
+                              ("копейка", "копейки", "копеек")))
 
-    return u" ".join(pts)
+    return " ".join(pts)
 
 
-@takes((int,long), optional(one_of(1,2,3)), gender=optional(one_of(1,2,3)))
+@takes((int,int), optional(one_of(1,2,3)), gender=optional(one_of(1,2,3)))
 def in_words_int(amount, gender=MALE):
     """
     Integer in words
@@ -297,15 +297,15 @@ def in_words_float(amount, _gender=FEMALE):
     pts = []
     # преобразуем целую часть
     pts.append(sum_string(int(amount), 2,
-                          (u"целая", u"целых", u"целых")))
+                          ("целая", "целых", "целых")))
     # теперь то, что после запятой
     remainder = _get_float_remainder(amount)
     signs = len(str(remainder)) - 1
     pts.append(sum_string(int(remainder), 2, FRACTIONS[signs]))
 
-    return u" ".join(pts)
+    return " ".join(pts)
 
-@takes((int,long,float,Decimal),
+@takes((int,int,float,Decimal),
        optional(one_of(None,1,2,3)),
        gender=optional(one_of(None,1,2,3)))
 def in_words(amount, gender=None):
@@ -337,7 +337,7 @@ def in_words(amount, gender=None):
     else:
         args = (amount, gender)
     # если целое
-    if isinstance(amount, (int, long)):
+    if isinstance(amount, int):
         return in_words_int(*args)
     # если дробное
     elif isinstance(amount, (float, Decimal)):
@@ -347,10 +347,10 @@ def in_words(amount, gender=None):
         # до сюда не должно дойти
         raise RuntimeError()
 
-@takes((int, long),
+@takes((int, int),
        one_of(1, 2, 3),
-       optional((unicode, nothing, list_of(unicode), tuple_of(unicode))),
-       items=optional((unicode, nothing, list_of(unicode), tuple_of(unicode))))
+       optional((str, nothing, list_of(str), tuple_of(str))),
+       items=optional((str, nothing, list_of(str), tuple_of(str))))
 def sum_string(amount, gender, items=None):
     """
     Get sum in words
@@ -374,10 +374,10 @@ def sum_string(amount, gender, items=None):
     @raise ValueError: amount bigger than 10**11
     @raise ValueError: amount is negative
     """
-    if isinstance(items, unicode):
+    if isinstance(items, str):
         items = utils.split_values(items)
     if items is None:
-        items = (u"", u"", u"")
+        items = ("", "", "")
 
     try:
         one_item, two_items, five_items = items
@@ -387,32 +387,32 @@ def sum_string(amount, gender, items=None):
     check_positive(amount)
 
     if amount == 0:
-        return u"ноль %s" % five_items
+        return "ноль %s" % five_items
 
-    into = u''
+    into = ''
     tmp_val = amount
 
     # единицы
     into, tmp_val = _sum_string_fn(into, tmp_val, gender, items)
     # тысячи
     into, tmp_val = _sum_string_fn(into, tmp_val, FEMALE,
-                                    (u"тысяча", u"тысячи", u"тысяч"))
+                                    ("тысяча", "тысячи", "тысяч"))
     # миллионы
     into, tmp_val = _sum_string_fn(into, tmp_val, MALE,
-                                    (u"миллион", u"миллиона", u"миллионов"))
+                                    ("миллион", "миллиона", "миллионов"))
     # миллиарды
     into, tmp_val = _sum_string_fn(into, tmp_val, MALE,
-                                    (u"миллиард", u"миллиарда", u"миллиардов"))
+                                    ("миллиард", "миллиарда", "миллиардов"))
     if tmp_val == 0:
         return into
     else:
         raise ValueError("Cannot operand with numbers bigger than 10**11")
 
-@takes(unicode,
-       (int,long),
+@takes(str,
+       (int,int),
        one_of(1,2,3),
-       optional((unicode, nothing, list_of(unicode), tuple_of(unicode))),
-       items=optional((unicode, nothing, list_of(unicode), tuple_of(unicode))))
+       optional((str, nothing, list_of(str), tuple_of(str))),
+       items=optional((str, nothing, list_of(str), tuple_of(str))))
 def _sum_string_fn(into, tmp_val, gender, items=None):
     """
     Make in-words representation of single order
@@ -436,7 +436,7 @@ def _sum_string_fn(into, tmp_val, gender, items=None):
     @raise ValueError: tmp_val is negative
     """
     if items is None:
-        items = (u"", u"", u"")
+        items = ("", "", "")
     one_item, two_items, five_items = items
     
     check_positive(tmp_val)
@@ -450,8 +450,8 @@ def _sum_string_fn(into, tmp_val, gender, items=None):
     tmp_val = tmp_val / 1000
     if rest == 0:
         # последние три знака нулевые
-        if into == u"":
-            into = u"%s " % five_items
+        if into == "":
+            into = "%s " % five_items
         return into, tmp_val
 
     # начинаем подсчет с rest
@@ -478,7 +478,7 @@ def _sum_string_fn(into, tmp_val, gender, items=None):
     words.append(into)
 
     # убираем пустые подстроки
-    words = filter(lambda x: len(x) > 0, words)
+    words = [x for x in words if len(x) > 0]
 
     # склеиваем и отдаем
-    return u" ".join(words).strip(), tmp_val
+    return " ".join(words).strip(), tmp_val

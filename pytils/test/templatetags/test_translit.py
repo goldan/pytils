@@ -8,25 +8,25 @@ from pytils.test.templatetags import helpers
 class TranslitDefaultTestCase(helpers.TemplateTagTestCase):
     
     def testLoad(self):
-        self.check_template_tag('load_tag', u'{% load pytils_translit %}', {}, u'')
+        self.check_template_tag('load_tag', '{% load pytils_translit %}', {}, '')
     
     def testTranslifyFilter(self):
         self.check_template_tag('translify_filter',
-            u'{% load pytils_translit %}{{ val|translify }}',
+            '{% load pytils_translit %}{{ val|translify }}',
             {'val': 'проверка'},
-            u'proverka')
+            'proverka')
     
     def testDetranslifyFilter(self):
         self.check_template_tag('detranslify_filter',
-            u'{% load pytils_translit %}{{ val|detranslify }}',
+            '{% load pytils_translit %}{{ val|detranslify }}',
             {'val': 'proverka'},
-            u'проверка')
+            'проверка')
 
     def testSlugifyFilter(self):
         self.check_template_tag('slugify_filter',
-            u'{% load pytils_translit %}{{ val|slugify }}',
+            '{% load pytils_translit %}{{ val|slugify }}',
             {'val': 'Проверка связи'},
-            u'proverka-svyazi')
+            'proverka-svyazi')
 
 
 if __name__ == '__main__':
